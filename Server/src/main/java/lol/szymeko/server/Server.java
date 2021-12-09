@@ -26,10 +26,11 @@ public class Server {
 
     private Map<String, ConnectionData> authData = new HashMap<>();
 
-    public static Server instance;
+    private static Server instance;
     public static Server getInstance() {
         return instance;
     }
+
     public Server() {
         instance = this;
     }
@@ -49,12 +50,12 @@ public class Server {
         EventLoopGroup bossGroup;
         EventLoopGroup workerGroup;
         if (Epoll.isAvailable()) {
-            bossGroup = new EpollEventLoopGroup(1);
-            workerGroup = new EpollEventLoopGroup(4);
+            bossGroup = new EpollEventLoopGroup();
+            workerGroup = new EpollEventLoopGroup();
             channelClass = EpollServerSocketChannel.class;
         } else {
-            bossGroup = new NioEventLoopGroup(1);
-            workerGroup = new NioEventLoopGroup(4);
+            bossGroup = new NioEventLoopGroup();
+            workerGroup = new NioEventLoopGroup();
             channelClass = NioServerSocketChannel.class;
         }
 

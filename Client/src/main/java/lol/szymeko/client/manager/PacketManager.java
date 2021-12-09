@@ -37,9 +37,10 @@ public class PacketManager extends SimpleChannelInboundHandler {
         ctx.writeAndFlush(Unpooled.copiedBuffer(username + ":" + license, CharsetUtil.UTF_8));
     }
 
-    @Override
+    //useless
+/*    @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         System.out.println("Disconnected");
-    }
+    }*/
 
 }

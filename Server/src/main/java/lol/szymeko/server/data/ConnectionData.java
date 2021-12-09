@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter @Setter
 public class ConnectionData {
 
-    private String user;
-    private String license;
+    private final String user;
+    private final String license;
 
     public ConnectionData(String user, String license) {
         this.user = user;
