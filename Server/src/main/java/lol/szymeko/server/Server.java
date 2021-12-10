@@ -24,7 +24,7 @@ import java.util.Map;
 @Getter
 public class Server {
 
-    private Map<String, ConnectionData> authData = new HashMap<>();
+    private final Map<String, ConnectionData> authData = new HashMap<>();
 
     private static Server instance;
     public static Server getInstance() {

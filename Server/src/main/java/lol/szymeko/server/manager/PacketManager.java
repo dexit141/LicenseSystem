@@ -18,20 +18,27 @@ public class PacketManager extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
 
-        String adress = ctx.channel().remoteAddress().toString();
+        String address = ctx.channel().remoteAddress().toString();
         String received = byteBuf.toString(CharsetUtil.UTF_8);
         String[] auth = received.split(":");
 
+        if (received.isEmpty() || auth[0].length() > 50 || auth[1].length() > 50) {
+            System.out.println(address + " -> Wrong length.");
+            ctx.writeAndFlush(Unpooled.buffer().writeBoolean(false));
+            ctx.close();
+            return;
+        }
+
         ConnectionData connectionData = Server.getInstance().getUser(auth[0]);
         if (connectionData == null) {
-            System.out.println(adress + " -> Wrong user/license.");
+            System.out.println(address + " -> Wrong username.");
             ctx.writeAndFlush(Unpooled.buffer().writeBoolean(false));
         } else {
-            if (connectionData.getUser().equals(auth[0]) && connectionData.getLicense().equals(auth[1])) {
-                System.out.println(adress + " -> License is correct.");
+            if (/*connectionData.getUser().equals(auth[0]) && */connectionData.getLicense().equals(auth[1])) {
+                System.out.println(address + " -> License is correct.");
                 ctx.writeAndFlush(Unpooled.buffer().writeBoolean(true));
             } else {
-                System.out.println(adress + " -> Wrong user/license!");
+                System.out.println(address + " -> Wrong license!");
                 ctx.writeAndFlush(Unpooled.buffer().writeBoolean(false));
             }
         }
@@ -40,13 +47,13 @@ public class PacketManager extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        String adress = ctx.channel().remoteAddress().toString();
-        System.out.println(adress + " connected.");
+        String address = ctx.channel().remoteAddress().toString();
+        System.out.println(address + " connected.");
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        String adress = ctx.channel().remoteAddress().toString();
-        System.out.println(adress + " disconnected.");
+        String address = ctx.channel().remoteAddress().toString();
+        System.out.println(address + " disconnected.");
     }
 }
