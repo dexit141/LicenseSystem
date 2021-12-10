@@ -25,8 +25,8 @@ public class Client {
             bootstrap.handler(new ChannelInitializer());
             ChannelFuture channelFuture = bootstrap.connect(adress, port).syncUninterruptibly();
             channel = channelFuture.channel();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
             System.exit(0);
         }
     }
